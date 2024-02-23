@@ -14,7 +14,7 @@ const fs = require("fs");
 
 const server = httpServer.createServer(function (req, res) {
   if (req.url == "/" && req.method == "GET") {
-    res.end(JSON.stringify(users) );
+    res.end(JSON.stringify(users));
   } else if (req.url == "/about" && req.method == "GET") {
     res.end("this is ABOUT");
   } else if (req.url == "/contact" && req.method == "GET") {
