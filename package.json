@@ -1,0 +1,16 @@
+{
+  "name": "session1",
+  "version": "1.0.0",
+  "description": "First application with Express.js",
+  "main": "index.js",
+  "scripts": {
+    "start": "nodemon index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "Amine TRIGUI",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.18.2"
+  }
+}
