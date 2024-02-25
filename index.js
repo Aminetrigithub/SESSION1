@@ -45,27 +45,41 @@ let users = [
 const express = require("express");
 
 const app = express();
-app.get("/", (req, res) =>{
+app.use(express.json());
+
+app.get("/", (req, res) => {
   res.send(users);
   // console.log(__dirname);
   // res.sendFile(__dirname+"/index.html");
 });
-app.post("/adduser", express.json(), (req, res) => {
-  let isExist = users.find((ele) => ele.email == req.body.email ) ;
+
+app.post("/adduser", (req, res) => {
+  let isExist = users.find((ele) => ele.email == req.body.email);
   if (isExist) {
     console.log(isExist);
     res.send("user is exist");
   } else {
-    console.log(isExist);
+    // console.log(isExist);
     users.push(req.body);
     res.send("salam to add user");
   }
 });
 
-app.delete("/deleteuser", express.json(), (req, res) => {
-  res.send("to delete")
+app.delete("/deleteuser",  (req, res) => {
+  let userIndex = users.findIndex((elem) => elem.email == req.body.email);
+  if (userIndex > -1) {
+    users.splice(userIndex, 1);
+    res.send("user deleted with sucess");
+  } else res.send("user not found to delete");
 });
 
+app.patch("/updateuser", express.json(), (req, res) => {
+  let userIndex = users.findIndex((ele) => ele.email == req.body.email);
+  if (userIndex > -1) {
+    users[userIndex].name = req.body.name;
+    res.send("user updated");
+  } else res.send("user not found to update");
+});
 
 app.listen(4200, () => {
   console.log("server running .........");
