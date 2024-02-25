@@ -65,7 +65,7 @@ app.post("/adduser", (req, res) => {
   }
 });
 
-app.delete("/deleteuser",  (req, res) => {
+app.delete("/deleteuser", (req, res) => {
   let userIndex = users.findIndex((elem) => elem.email == req.body.email);
   if (userIndex > -1) {
     users.splice(userIndex, 1);
@@ -73,7 +73,7 @@ app.delete("/deleteuser",  (req, res) => {
   } else res.send("user not found to delete");
 });
 
-app.patch("/updateuser", express.json(), (req, res) => {
+app.patch("/updateuser", (req, res) => {
   let userIndex = users.findIndex((ele) => ele.email == req.body.email);
   if (userIndex > -1) {
     users[userIndex].name = req.body.name;
