@@ -42,35 +42,57 @@ let users = [
   { name: "Mathilda Harper", email: "ip@bi.bi", age: 35 },
   { name: "Troy White", email: "jinofik@ohowuwun.gb", age: 35 },
 ];
-const express = require("express");
 
+const express = require("express");
 const app = express();
 app.use(express.json());
 
+const mysql = require("mysql2");
+const query = mysql.createConnection({
+  host: "localhost",
+  database: "session3_node",
+  user: "root",
+  password: "",
+});
+
 app.get("/", (req, res) => {
-  res.send(users);
+  // query.execute('insert into users (name,email,password) values ("maha","maha@gmail.com","1slfp")')
+  // query.execute('update users set name="ali" where id = 6 ')
+  query.execute("select * from users ", (err, data) => {
+    if (err) res.send(err);
+    else res.send(data);
+  });
+
   // console.log(__dirname);
   // res.sendFile(__dirname+"/index.html");
 });
 
 app.post("/adduser", (req, res) => {
-  let isExist = users.find((ele) => ele.email == req.body.email);
-  if (isExist) {
-    console.log(isExist);
-    res.send("user is exist");
-  } else {
-    // console.log(isExist);
-    users.push(req.body);
-    res.send("salam to add user");
-  }
+  const { name, email, password } = req.body;
+  // let isExist = users.find((ele) => ele.email == email);
+
+  // if (express.json.toString(isExist)) {
+  //   res.send("user is exist");
+  // } else {
+  query.execute(
+    `insert into users (name,email,password) values ('${name}','${email}',${password})`
+  );
+  // console.log(isExist);
+  // users.push(req.body);
+  res.json({ message: "User success to add" });
+  // }
 });
 
-app.delete("/deleteuser", (req, res) => {
-  let userIndex = users.findIndex((elem) => elem.email == req.body.email);
-  if (userIndex > -1) {
-    users.splice(userIndex, 1);
-    res.send("user deleted with sucess");
-  } else res.send("user not found to delete");
+app.put("/", (req, res) => {
+  const { name, id } = req.body;
+  query.execute(
+    `update users set name = '${name}' where id = ${id}`,
+    (err, data) => {
+      if (err) res.send(err);
+      else res.send(data);
+      // res.json({ message: "user updated" });
+    }
+  );
 });
 
 app.patch("/updateuser", (req, res) => {
@@ -81,6 +103,16 @@ app.patch("/updateuser", (req, res) => {
   } else res.send("user not found to update");
 });
 
-app.listen(4200, () => {
+app.delete("/deleteuser", (req, res) => {
+  const { id } = req.body;
+  query.execute(`delete from users where id =${id} `, (err, data) => {
+    res.json("user deleted");
+  });
+
+  // console.log(__dirname);
+  // res.sendFile(__dirname+"/index.html");
+});
+
+app.listen(4300, () => {
   console.log("server running .........");
 });
